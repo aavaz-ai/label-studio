@@ -270,7 +270,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
 
         url = 'https://viveklabel.free.beeceptor.com'
-        myobj = {'somekey': 'somevalue'}
+        myobj = {'some_other_key': request}
 
         x = requests.post(url, data = myobj)
         # save user history with annotator_id, time & annotation result
