@@ -269,13 +269,14 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
 
-        url = 'https://viveklabel.free.beeceptor.com'
-        myobj = {'some_other_key': request}
-
-        x = requests.post(url, data = myobj)
         # save user history with annotator_id, time & annotation result
         annotation_id = self.kwargs['pk']
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
+
+        url = 'https://viveklabel.free.beeceptor.com'
+        myobj = {'some_other_key': annotation}
+
+        x = requests.post(url, data = myobj)
 
         annotation.task.save()  # refresh task metrics
 
@@ -297,7 +298,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         logger.debug("THIS IS THE INFO REQUEST FROM PATCH")
         logger.info("THIS IS THE INFO REQUEST FROM PATCH")
         url = 'https://viveklabel.free.beeceptor.com'
-        myobj = {'somekey': request}
+        myobj = {'somekey': "test"}
 
         x = requests.post(url, data = myobj)
 
