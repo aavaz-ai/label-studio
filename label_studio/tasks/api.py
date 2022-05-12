@@ -275,9 +275,10 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
 
         url = 'https://viveklabel.free.beeceptor.com'
         myobj = {'annotation_id': annotation.id, 'result': annotation.result}
-
+        
         x = requests.post(url, data = myobj)
 
+        raise Exception("This annotation needs to be improved")
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
