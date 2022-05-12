@@ -1,6 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
+import requests
 
 from django.db.models import Q
 from django.utils import timezone
@@ -268,7 +269,10 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
 
-        logger.debug("THIS IS THE UPDATE CALL, DO SHIT HERE")
+        url = 'https://viveklabel.free.beeceptor.com'
+        myobj = {'somekey': 'somevalue'}
+
+        x = requests.post(url, data = myobj)
         # save user history with annotator_id, time & annotation result
         annotation_id = self.kwargs['pk']
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
