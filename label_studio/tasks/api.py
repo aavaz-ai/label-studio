@@ -297,7 +297,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         logger.debug("THIS IS THE INFO REQUEST FROM PATCH")
         logger.info("THIS IS THE INFO REQUEST FROM PATCH")
         url = 'https://viveklabel.free.beeceptor.com'
-        myobj = {'somekey': 'somevalue'}
+        myobj = {'somekey': request}
 
         x = requests.post(url, data = myobj)
 
