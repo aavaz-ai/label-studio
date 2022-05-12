@@ -294,6 +294,13 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
 
     @api_webhook(WebhookAction.ANNOTATION_UPDATED)
     def patch(self, request, *args, **kwargs):
+        logger.debug("THIS IS THE INFO REQUEST FROM PATCH")
+        logger.info("THIS IS THE INFO REQUEST FROM PATCH")
+        url = 'https://viveklabel.free.beeceptor.com'
+        myobj = {'somekey': 'somevalue'}
+
+        x = requests.post(url, data = myobj)
+
         return super(AnnotationAPI, self).patch(request, *args, **kwargs)
 
     @api_webhook_for_delete(WebhookAction.ANNOTATIONS_DELETED)
