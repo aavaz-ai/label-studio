@@ -274,7 +274,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
 
         url = 'https://viveklabel.free.beeceptor.com'
-        myobj = {'annotation_id': annotation.id}
+        myobj = {'annotation_id': annotation.id, 'result': annotation.result}
 
         x = requests.post(url, data = myobj)
 
