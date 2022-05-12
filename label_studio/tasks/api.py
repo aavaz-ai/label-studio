@@ -267,6 +267,8 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         annotation.delete()
 
     def update(self, request, *args, **kwargs):
+
+        logger.info("THIS IS THE UPDATE CALL, DO SHIT HERE")
         # save user history with annotator_id, time & annotation result
         annotation_id = self.kwargs['pk']
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
