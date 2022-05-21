@@ -368,7 +368,9 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         url = "https://aryan.free.beeceptor.com/my/api/path"
         print(url)
         myobj = {"result":result}
-        logger.debug(f'res={requests.get(url, data = myobj)}')
+        x=requests.get(url, params = myobj)
+        data = x.json()
+        print(data)
         raise Exception("This annotation needs to be improved")
         
         # save stats about how well annotator annotations coincide with current prediction
