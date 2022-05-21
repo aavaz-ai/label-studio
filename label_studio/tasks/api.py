@@ -364,7 +364,9 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         result = ser.validated_data.get('result')
         extra_args = {'task_id': self.kwargs['pk']}
 
+        print(result)
         url = "https://aryan.free.beeceptor.com/my/api/path"
+        print(url)
         myobj = {"result":result}
         logger.debug(f'res={requests.get(url, data = myobj)}')
         raise Exception("This annotation needs to be improved")
