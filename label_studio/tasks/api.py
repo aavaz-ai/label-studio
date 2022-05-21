@@ -365,12 +365,14 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         extra_args = {'task_id': self.kwargs['pk']}
 
         print(result)
-        url = "https://aryan.free.beeceptor.com/my/api/path"
+        print(extra_args)
+        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/label-studio/reason-creation/ml/validate"
         print(url)
+        params = {"x-apigw-api-id":"0ff610oe20", "Content-Type":"application/json"}
         myobj = {"result":result}
-        x=requests.get(url, params = myobj)
+        x=requests.post(url, params = params, data= myobj)
         data = x.json()
-        print(data)
+        print(data['isAccepted'])
         raise Exception("This annotation needs to be improved")
         
         # save stats about how well annotator annotations coincide with current prediction
