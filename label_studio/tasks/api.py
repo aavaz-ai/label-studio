@@ -366,11 +366,10 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
         print(result)
         print(extra_args)
-        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/label-studio/reason-creation/ml/validate"
+        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
         print(url)
-        params = {"x-apigw-api-id":"0ff610oe20", "Content-Type":"application/json"}
         myobj = {"result":result}
-        x=requests.post(url, params = params, data= myobj)
+        x=requests.post(url, data= myobj)
         data = x.json()
         print(data['isAccepted'])
         raise Exception("This annotation needs to be improved")
