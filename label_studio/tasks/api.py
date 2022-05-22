@@ -365,17 +365,6 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         result = ser.validated_data.get('result')
         extra_args = {'task_id': self.kwargs['pk']}
 
-        print(result)
-        print(extra_args)
-        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
-        print(url)
-        myobj = {"result":result}
-        x=requests.post(url, data= json.dumps(myobj))
-        data = x.json()
-        print(data)
-        print(data['isAccepted'])
-        raise Exception("This annotation needs to be improved")
-        
         # save stats about how well annotator annotations coincide with current prediction
         # only for finished task annotations
         if result is not None:
@@ -396,6 +385,19 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
         if 'completed_by' not in ser.validated_data:
             extra_args['completed_by'] = self.request.user
+
+        print(result)
+        print(extra_args)
+        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
+        print(url)
+        myobj = {"result":result, "extra_args":extra_args}
+        x=requests.post(url, data= json.dumps(myobj))
+        data = x.json()
+        print(data)
+        if data['is_accepted']:
+            print("Accepted")
+        raise Exception("This annotation needs to be improved")
+        
 
         # create annotation
         logger.debug(f'User={self.request.user}: save annotation')
