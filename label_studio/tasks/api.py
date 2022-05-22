@@ -361,9 +361,32 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
     def perform_create(self, ser):
         task = get_object_with_check_and_log(self.request, Task, pk=self.kwargs['pk'])
+        new_task = TaskSimpleSerializer(task).data
         # project = get_object_with_check_and_log(self.request, Project, pk=self.kwargs['pk'])
-        project = Task.objects.get(id=self.kwargs['pk']).project.id
-        print(project)
+        try:
+            project = task.project.id
+            print(project)
+        except:
+            print("Approach 1 not working")
+            pass
+        try:
+            project = task.project.model_version
+            print(project)
+        except:
+            print("Approach 2 not working")
+            pass
+        try:
+            project = new_task["project"]
+            print(project)
+        except:
+            print("Approach 3 not working")
+            pass
+        try:
+            project = self.project.id
+            print(project)
+        except:
+            print("Approach 4 not working")
+            pass
         # annotator has write access only to annotations and it can't be checked it after serializer.save()
         user = self.request.user
     
