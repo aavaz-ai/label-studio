@@ -380,9 +380,10 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
             extra_args.update({
                 'prediction': prediction_ser,
             })
-
+        new_task = TaskSimpleSerializer(task).data
         print(result)
         print(extra_args)
+        print(new_task)
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
         print(url)
         myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task}
