@@ -1,6 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
+import json
 import requests
 from django.db.models import Q
 from django.utils import timezone
@@ -369,8 +370,9 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
         print(url)
         myobj = {"result":result}
-        x=requests.post(url, data= myobj)
+        x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
+        print(data)
         print(data['isAccepted'])
         raise Exception("This annotation needs to be improved")
         
