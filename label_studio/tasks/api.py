@@ -358,7 +358,6 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
     def perform_create(self, ser):
         task = get_object_with_check_and_log(self.request, Task, pk=self.kwargs['pk'])
-        print(task.json())
         # annotator has write access only to annotations and it can't be checked it after serializer.save()
         user = self.request.user
 
