@@ -361,32 +361,9 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
     def perform_create(self, ser):
         task = get_object_with_check_and_log(self.request, Task, pk=self.kwargs['pk'])
-        new_task = TaskSimpleSerializer(task).data
-        # project = get_object_with_check_and_log(self.request, Project, pk=self.kwargs['pk'])
-        try:
-            project = task.project.id
-            print(project)
-        except:
-            print("Approach 1 not working")
-            pass
-        try:
-            project = task.project.model_version
-            print(project)
-        except:
-            print("Approach 2 not working")
-            pass
-        try:
-            project = new_task["project"]
-            print(project)
-        except:
-            print("Approach 3 not working")
-            pass
-        try:
-            project = self.project.id
-            print(project)
-        except:
-            print("Approach 4 not working")
-            pass
+        project_id = task.project.id
+        project = get_object_with_check_and_log(self.request, Project, pk=project_id)
+
         # annotator has write access only to annotations and it can't be checked it after serializer.save()
         user = self.request.user
     
@@ -408,15 +385,15 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
             extra_args.update({
                 'prediction': prediction_ser,
             })
-        new_task = TaskSimpleSerializer(task).data
-        new_project = ProjectSerializer(project).data
+        task_json = TaskSimpleSerializer(task).data
+        project_json = ProjectSerializer(project).data
         print(result)
         print(extra_args)
-        print(new_task)
-        print(new_project)
+        print(task_json)
+        print(project_json)
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
         print(url)
-        myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task}
+        myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task_json, "project":project_json}
         x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
         print(data)
