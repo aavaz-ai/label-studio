@@ -33,7 +33,8 @@ from tasks.serializers import (
     TaskSimpleSerializer,
 )
 from projects.serializers import (
-    ProjectSerializer
+    ProjectSerializer,
+    ProjectSummarySerializer,
 )
 from webhooks.models import WebhookAction
 from webhooks.utils import (
@@ -386,7 +387,16 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
                 'prediction': prediction_ser,
             })
         task_json = TaskSimpleSerializer(task).data
-        project_json = ProjectSerializer(project).data
+        try:
+            project_json = ProjectSerializer(project).data
+            print(project_json)
+        except:
+            print("Project Serializer failed")
+        try:
+            project_json = ProjectSummarySerializer(project).data
+            print(project_json)
+        except:
+            print("Project Serializer failed")
         print(result)
         print(extra_args)
         print(task_json)
