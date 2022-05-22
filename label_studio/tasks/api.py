@@ -32,6 +32,9 @@ from tasks.serializers import (
     TaskSerializer,
     TaskSimpleSerializer,
 )
+from projects.serializers import (
+    ProjectSerializer
+)
 from webhooks.models import WebhookAction
 from webhooks.utils import (
     api_webhook,
@@ -358,6 +361,7 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
     def perform_create(self, ser):
         task = get_object_with_check_and_log(self.request, Task, pk=self.kwargs['pk'])
+        project = get_object_with_check_and_log(self.request, Project, pk=self.kwargs['pk'])
         # annotator has write access only to annotations and it can't be checked it after serializer.save()
         user = self.request.user
 
@@ -380,9 +384,11 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
                 'prediction': prediction_ser,
             })
         new_task = TaskSimpleSerializer(task).data
+        new_project = ProjectSerializer(project).data
         print(result)
         print(extra_args)
         print(new_task)
+        print(new_project)
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
         print(url)
         myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task}
