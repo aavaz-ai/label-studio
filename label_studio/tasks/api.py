@@ -358,6 +358,7 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
     def perform_create(self, ser):
         task = get_object_with_check_and_log(self.request, Task, pk=self.kwargs['pk'])
+        print(task)
         # annotator has write access only to annotations and it can't be checked it after serializer.save()
         user = self.request.user
 
@@ -380,23 +381,26 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
                 'prediction': prediction_ser,
             })
 
+        print(result)
+        print(extra_args)
+        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
+        print(url)
+        myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task}
+        x=requests.post(url, data= json.dumps(myobj))
+        data = x.json()
+        print(data)
+        if data['is_accepted']:
+            print("Accepted")
+        else:
+            raise Exception("This annotation needs to be improved")
+
         if 'was_cancelled' in self.request.GET:
             extra_args['was_cancelled'] = bool_from_request(self.request.GET, 'was_cancelled', False)
 
         if 'completed_by' not in ser.validated_data:
             extra_args['completed_by'] = self.request.user
 
-        print(result)
-        print(extra_args)
-        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
-        print(url)
-        myobj = {"result":result, "extra_args":extra_args}
-        x=requests.post(url, data= json.dumps(myobj))
-        data = x.json()
-        print(data)
-        if data['is_accepted']:
-            print("Accepted")
-        raise Exception("This annotation needs to be improved")
+       
         
 
         # create annotation
