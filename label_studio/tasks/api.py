@@ -275,7 +275,25 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         # save user history with annotator_id, time & annotation result
         annotation_id = self.kwargs['pk']
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
-
+        try:
+            task_json = TaskSimpleSerializer(annotation.task).data
+            print(task_json)
+            project_id= task_json["Project"]
+        except:
+            print("Task did not fetch")
+        try:
+            task_json = AnnotationSerializer(annotation).data
+            print(task_json)
+        except:
+            print("Annotation not serialized")
+        try:
+            project_id = task.project.id
+            project = get_object_with_check_and_log(self.request, Project, pk=project_id)
+            project_json = ProjectSerializer(project).data
+            print(project_json)
+        except:
+            print("Project not fetched")
+        raise("Errorrrrrr")
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
@@ -386,40 +404,25 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
             extra_args.update({
                 'prediction': prediction_ser,
             })
+
         task_json = TaskSimpleSerializer(task).data
-        try:
-            project_json = ProjectSerializer(project).data
-            print(project_json)
-        except:
-            print("Project Serializer failed")
-        try:
-            project_json = ProjectSummarySerializer(project).data
-            print(project_json)
-        except:
-            print("Project Serializer failed")
-        print(result)
-        print(extra_args)
-        print(task_json)
-        print(project_json)
+        project_json = ProjectSerializer(project).data
+
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
-        print(url)
-        myobj = {"annotation":result, "task_id":extra_args['task_id'], "task":task_json, "project":project_json}
+        myobj = {"annotation":result, "task":task_json, "project":project_json, "isResanRequired":True, "isReasonSimilarityRequired":True}
         x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
         print(data)
-        if data['is_accepted']:
+        if data['isAccepted']:
             print("Accepted")
         else:
-            raise Exception("This annotation needs to be improved")
+            raise Exception(data['message'])
 
         if 'was_cancelled' in self.request.GET:
             extra_args['was_cancelled'] = bool_from_request(self.request.GET, 'was_cancelled', False)
 
         if 'completed_by' not in ser.validated_data:
             extra_args['completed_by'] = self.request.user
-
-       
-        
 
         # create annotation
         logger.debug(f'User={self.request.user}: save annotation')
