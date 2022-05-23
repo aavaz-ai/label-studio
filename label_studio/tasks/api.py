@@ -1,5 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
+import os
 import logging
 import json
 import requests
@@ -275,24 +276,20 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         # save user history with annotator_id, time & annotation result
         annotation_id = self.kwargs['pk']
         annotation = get_object_with_check_and_log(request, Annotation, pk=annotation_id)
-        try:
-            task_json = TaskSimpleSerializer(annotation.task).data
-            print(task_json)
-            project_id= task_json["project"]
-        except:
-            print("Task did not fetch")
-        try:
-            task_json = AnnotationSerializer(annotation).data
-            print(task_json)
-        except:
-            print("Annotation not serialized")
-        try:
-            project = get_object_with_check_and_log(self.request, Project, pk=project_id)
-            project_json = ProjectSerializer(project).data
-            print(project_json)
-        except:
-            print("Project not fetched")
-        raise Exception("Blah")
+       
+        task_json = TaskSimpleSerializer(annotation.task).data
+        project_id= task_json["project"]
+        annotation_json = AnnotationSerializer(annotation).data
+        project = get_object_with_check_and_log(self.request, Project, pk=project_id)
+        project_json = ProjectSerializer(project).data
+        if os.environ['env'] == "staging":
+            print(os.environ['url'])
+        url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
+        myobj = {"annotation":annotation_json, "task":task_json, "project":project_json, "isResanRequired":False, "isReasonSimilarityRequired":False}
+        x=requests.post(url, data= json.dumps(myobj))
+        data = x.json()
+        print(data)
+
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
