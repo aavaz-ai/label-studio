@@ -278,7 +278,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         try:
             task_json = TaskSimpleSerializer(annotation.task).data
             print(task_json)
-            project_id= task_json["Project"]
+            project_id= task_json["project"]
         except:
             print("Task did not fetch")
         try:
@@ -287,13 +287,12 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         except:
             print("Annotation not serialized")
         try:
-            project_id = task.project.id
             project = get_object_with_check_and_log(self.request, Project, pk=project_id)
             project_json = ProjectSerializer(project).data
             print(project_json)
         except:
             print("Project not fetched")
-        raise("Errorrrrrr")
+        raise Exception("Blah")
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
