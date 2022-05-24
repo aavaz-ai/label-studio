@@ -282,7 +282,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         project = get_object_with_check_and_log(self.request, Project, pk=project_id)
         project_json = ProjectSerializer(project).data
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
-        myobj = {"annotation":annotation_json, "task":task_json, "project":project_json, "isResanRequired":False, "isReasonSimilarityRequired":False}
+        myobj = {"annotation":annotation_json, "task":task_json, "project":project_json, "isReSanRequired":False, "isReasonSimilarityRequired":False}
         x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
         print(data)
@@ -402,7 +402,7 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         project_json = ProjectSerializer(project).data
 
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/reason-creation/ml/validate"
-        myobj = {"annotation":result, "task":task_json, "project":project_json, "isResanRequired":True, "isReasonSimilarityRequired":True}
+        myobj = {"annotation":result, "task":task_json, "project":project_json, "isReSanRequired":True, "isReasonSimilarityRequired":True}
         x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
         print(data)

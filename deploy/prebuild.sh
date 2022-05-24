@@ -15,6 +15,3 @@ python3 $MANAGE collectstatic --no-input
 
 echo "=> Create version file..."
 python3 ${SCRIPT_DIR}/../label_studio/core/version.py
-
-export ENTERPRET_ENV="staging"
-export STAGING_URL="aryan-url-test"
