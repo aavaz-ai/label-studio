@@ -400,7 +400,7 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
 
         task_json = TaskSimpleSerializer(task).data
         project_json = ProjectSerializer(project).data
-
+        print(result)
         url = "https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/validate"
         myobj = {"annotation":result, "task":task_json, "project":project_json, "isReSanRequired":True, "isReasonSimilarityRequired":True}
         x=requests.post(url, data= json.dumps(myobj))
