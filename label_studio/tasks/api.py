@@ -409,7 +409,7 @@ class AnnotationsListAPI(generics.ListCreateAPIView):
         if data['isAccepted']:
             print("Accepted")
         else:
-            result.append({'value': {'text': [data['isAccepted']]}, 'id': '12345', 'from_name': 'Warning', 'to_name': 'Samples', 'type': 'textarea', 'origin': 'prediction'})
+            result.append({'value': {'text': [data['message']]}, 'id': '12345', 'from_name': 'Warning', 'to_name': 'Samples', 'type': 'textarea', 'origin': 'prediction'})
             print(result)
 
         if 'was_cancelled' in self.request.GET:
