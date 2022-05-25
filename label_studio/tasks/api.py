@@ -288,9 +288,10 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         print(data)
         ind=0
         for res in annotation.result:
+            print(ind,res)
             if res["from_name"]=="Warning":
-                ind=ind+1
                 break
+            ind = ind+1
         print(ind, annotation.result)
         annotation.result =  annotation.result[:ind] + annotation.result[ind+1 :]
         print(annotation.result)
