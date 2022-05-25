@@ -293,7 +293,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
                 break
             ind = ind+1
         print(ind, annotation.result)
-        annotation.result =  annotation.result[:ind] + annotation.result[ind+1 :]
+        annotation.result[ind]["text"]=[]
         print(annotation.result)
         annotation.task.save()  # refresh task metrics
 
