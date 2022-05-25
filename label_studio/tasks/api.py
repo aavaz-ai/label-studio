@@ -288,13 +288,10 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         print(data)
         ind=0
         for res in annotation.result:
-            print(ind,res)
             if res["from_name"]=="Warning":
                 break
             ind = ind+1
-        print(ind, annotation.result)
         annotation.result[ind]["text"]=[]
-        print(annotation.result)
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
