@@ -291,7 +291,9 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
             if res["from_name"]=="Warning":
                 ind=ind+1
                 break
+        print(ind, annotation.result)
         annotation.result =  annotation.result[:ind] + annotation.result[ind+1 :]
+        print(annotation.result)
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
