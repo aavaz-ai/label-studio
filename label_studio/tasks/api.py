@@ -286,7 +286,12 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         x=requests.post(url, data= json.dumps(myobj))
         data = x.json()
         print(data)
-
+        ind=0
+        for res in annotation.result:
+            if res["from_name"]=="Warning":
+                ind=ind+1
+                break
+        annotation.result =  annotation.result[:ind] + annotation.result[ind+1 :]
         annotation.task.save()  # refresh task metrics
 
         if self.request.data.get('ground_truth'):
