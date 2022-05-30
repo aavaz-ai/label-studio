@@ -44,6 +44,7 @@ services:
       - POSTGRE_HOST=${POSTGRE_HOST}
       - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-}
       - LABEL_STUDIO_COPY_STATIC_DATA=true
+      - ENTERPRET_VALIDATE_ENDPOINT=https://0ff610oe20.execute-api.us-east-2.amazonaws.com/Stage/callback/label-studio/validate
     volumes:
       - ./mydata:/label-studio/data:rw
       # keep in sync with deploy/docker-entrypoint.d/30-copy-static-data.sh
